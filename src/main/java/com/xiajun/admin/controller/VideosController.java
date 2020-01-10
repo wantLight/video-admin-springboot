@@ -78,13 +78,13 @@ public class VideosController {
     public JSONResult getVideoNum() {
         List<EchartsVo> videoNum = videoService.getVideoNum();
         //todo 查分成数组返回给前端处理2
-        Integer[] total = (Integer[]) videoNum.stream().map(echartsVo -> echartsVo.getTotal()).toArray();
-        Integer[] success = (Integer[]) videoNum.stream().map(echartsVo -> echartsVo.getSuccess()).toArray();
-        Integer[] wait = (Integer[]) videoNum.stream().map(echartsVo -> echartsVo.getWait()).toArray();
-        Integer[] error = (Integer[]) videoNum.stream().map(echartsVo -> echartsVo.getError()).toArray();
-        Integer[] month = (Integer[]) videoNum.stream().map(echartsVo -> echartsVo.getMonth()).toArray();
+        Integer[] total = videoNum.stream().map(echartsVo -> echartsVo.getTotal()).toArray(Integer[]::new);
+        Integer[] success = videoNum.stream().map(echartsVo -> echartsVo.getSuccess()).toArray(Integer[]::new);
+        Integer[] wait = videoNum.stream().map(echartsVo -> echartsVo.getWait()).toArray(Integer[]::new);
+        Integer[] error = videoNum.stream().map(echartsVo -> echartsVo.getError()).toArray(Integer[]::new);
+        String[] month = videoNum.stream().map(echartsVo -> echartsVo.getMonth()+"月").toArray(String[]::new);
 
-        Map<String,Integer[]> result = new HashMap(8);
+        Map<String,Object> result = new HashMap(8);
         result.put("total",total);
         result.put("success",success);
         result.put("wait",wait);
