@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xiajun.admin.mapper.VideosMapper" >
+  
+  <select id="queryAllVideos" resultType="com.xiajun.admin.pojo.vo.VideosVO" parameterType="string">
+  
+  	select v.*,u.face_image as face_image,u.nickname as nickname from videos v
+  	left join users u on u.id = v.user_id
+  	where
+  		1 = 1
+  	order by v.create_time desc
+  
+  </select>
+
+
+	<select id="getVideoNum" resultType="com.xiajun.admin.pojo.vo.EchartsVo">
+
+  	SELECT IFNULL(total,0) total,a0.mon as month,IFNULL(success,0) success,IFNULL(wait,0) wait,IFNULL(error,0) error from
+(SELECT count(1) as total,MONTH(create_time) mon FROM videos
+GROUP BY MONTH(create_time) )
+a0 left join
+(SELECT count(1) as success,MONTH(create_time) mon FROM videos
+WHERE `status` = 1
+GROUP BY MONTH(create_time) ) a1 on a0.mon = a1.mon
+left join
+(SELECT count(1) as wait,MONTH(create_time) mon FROM videos
+WHERE `status` = 0
+GROUP BY MONTH(create_time) ) a2 on a0.mon = a2.mon
+left join
+(SELECT count(1) as error,MONTH(create_time) mon FROM videos
+WHERE `status` = 2
+GROUP BY MONTH(create_time) ) a3 on a0.mon = a3.mon
+
+  </select>
+
+  
+</mapper>
